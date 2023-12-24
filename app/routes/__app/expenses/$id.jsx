@@ -27,13 +27,6 @@ export default function ExpensesId() {
   );
 }
 
-// export async function loader({ params }) {
-//   console.log("params: ", params);
-//   const res = await getExpenseById(params.id);
-//   console.log("res: ", res);
-//   return res;
-// }
-
 export async function action({ params, request }) {
   if (request.method === "DELETE") {
     await deleteExpense(params.id);

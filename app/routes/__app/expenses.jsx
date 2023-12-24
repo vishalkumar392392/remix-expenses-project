@@ -1,6 +1,7 @@
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { FaPlus, FaDownload } from "react-icons/fa";
 import ExpensesList from "~/components/expenses/ExpensesList";
+import { requireUserSession } from "~/data/auth.server";
 import { getExpenses } from "~/data/expense.server";
 
 export default function Expenses() {
@@ -20,7 +21,9 @@ export default function Expenses() {
             <span>Load Raw Data</span>
           </a>
         </section>
-        {hasExpenses ? <ExpensesList expenses={expenses} />:(
+        {hasExpenses ? (
+          <ExpensesList expenses={expenses} />
+        ) : (
           <section id="no-expenses">
             <h1>No expenses found</h1>
             <p>
@@ -33,6 +36,7 @@ export default function Expenses() {
   );
 }
 
-export async function loader() {
-  return await getExpenses();
+export async function loader({ request }) {
+  const userId = await requireUserSession(request);
+  return await getExpenses(userId);
 }

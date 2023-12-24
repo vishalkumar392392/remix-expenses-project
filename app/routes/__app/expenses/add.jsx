@@ -2,6 +2,7 @@ import { redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import ExpenseForm from "~/components/expenses/ExpenseForm";
 import Modal from "~/components/util/Modal";
+import { requireUserSession } from "~/data/auth.server";
 import { addExpense } from "~/data/expense.server";
 import { validateExpenseInput } from "~/data/validation.server";
 
@@ -22,6 +23,7 @@ export async function action({ request }) {
   } catch (error) {
     return error;
   }
-  await addExpense(expenseData);
+  const userId = await requireUserSession(request);
+  await addExpense(expenseData, userId);
   return redirect("/expenses");
 }
